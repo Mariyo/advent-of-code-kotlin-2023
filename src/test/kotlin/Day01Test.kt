@@ -2,7 +2,6 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class Day01Test {
     @Test
@@ -44,13 +43,11 @@ class Day01Test {
     }
 
     @Test
-    fun `it can sum input from Day01_input resource`() {
+    fun `it can sum input from Day01_input resource to result 54916`() {
         val day01Part1Result = Day01().part1SumCalibrationValuesFromInput(
             readInput("Day01_input")
         )
 
-        assertTrue(0 <= day01Part1Result)
-
-        println(day01Part1Result)
+        assertEquals(54916, day01Part1Result)
     }
 }
