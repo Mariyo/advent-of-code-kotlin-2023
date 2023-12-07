@@ -2,9 +2,10 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class Day02Test {
+
+    private val bag = Bag(12, 13, 14)
 
     private val game1 = Game(
         1, listOf(
@@ -60,10 +61,7 @@ class Day02Test {
         DynamicTest.dynamicTest("Game no.${game.id} should be possible == $expected") {
             assertEquals(
                 expected,
-                Day02().puzzle1IsPossible(
-                    game,
-                    Bag(12, 13, 14)
-                )
+                Day02().puzzle1IsPossible(game, bag)
             )
         }
     }
@@ -74,7 +72,7 @@ class Day02Test {
             8,
             Day02().puzzle1SumAllPossibleGameIds(
                 listOf(game1, game2, game3, game4, game5),
-                Bag(12, 13, 14)
+                bag
             )
         )
     }
@@ -89,6 +87,22 @@ class Day02Test {
             assertEquals(expected.id, resultGame.id)
             assertEquals(expected.cubeSets, resultGame.cubeSets)
         }
+    }
+
+    @Test
+    fun `it can sum IDs of all games from input`() {
+        val inputGames = readInput("Day02_input")
+        assertEquals(100, inputGames.size)
+
+        val games = inputGames.map { input ->
+            Day02().loadGameFromInput(input)
+        }
+
+        assertEquals(100, games.size)
+
+        val sum = Day02().puzzle1SumAllPossibleGameIds(games, bag)
+
+        assertEquals(2679, sum)
     }
 
 }
