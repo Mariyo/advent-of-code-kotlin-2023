@@ -61,7 +61,7 @@ class Day02Test {
         DynamicTest.dynamicTest("Game no.${game.id} should be possible == $expected") {
             assertEquals(
                 expected,
-                Day02().puzzle1IsPossible(game, bag)
+                Day02(bag).puzzle1IsPossible(game)
             )
         }
     }
@@ -70,9 +70,8 @@ class Day02Test {
     fun `it can sum IDs of all possible games`() {
         assertEquals(
             8,
-            Day02().puzzle1SumAllPossibleGameIds(
-                listOf(game1, game2, game3, game4, game5),
-                bag
+            Day02(bag).puzzle1SumAllPossibleGameIds(
+                listOf(game1, game2, game3, game4, game5)
             )
         )
     }
@@ -83,7 +82,7 @@ class Day02Test {
         "Game 5: 3 green, 1 blue, 6 red; 1 red, 2 green, 2 blue" to game5,
     ).map { (input, expected) ->
         DynamicTest.dynamicTest("Game from $input should be same as $expected") {
-            val resultGame = Day02().loadGameFromInput(input)
+            val resultGame = Day02(bag).loadGameFromInput(input)
             assertEquals(expected.id, resultGame.id)
             assertEquals(expected.cubeSets, resultGame.cubeSets)
         }
@@ -95,14 +94,22 @@ class Day02Test {
         assertEquals(100, inputGames.size)
 
         val games = inputGames.map { input ->
-            Day02().loadGameFromInput(input)
+            Day02(bag).loadGameFromInput(input)
         }
 
         assertEquals(100, games.size)
 
-        val sum = Day02().puzzle1SumAllPossibleGameIds(games, bag)
+        val sum = Day02(bag).puzzle1SumAllPossibleGameIds(games)
 
         assertEquals(2679, sum)
+    }
+
+    @Test
+    fun `it solves puzzle1`() {
+        assertEquals(
+            2679,
+            Day02(bag).puzzle1SumAllPossibleGameIdsFromFile("Day02_input")
+        )
     }
 
 }

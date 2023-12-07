@@ -1,9 +1,9 @@
-class Day02 {
-    fun puzzle1IsPossible(game: Game, bag: Bag): Boolean {
+class Day02(private val bag: Bag) {
+    fun puzzle1IsPossible(game: Game): Boolean {
         return bag.hasEnoughColoredCubes(game)
     }
 
-    fun puzzle1SumAllPossibleGameIds(games: List<Game>, bag: Bag): Int {
+    fun puzzle1SumAllPossibleGameIds(games: List<Game>): Int {
         return games.filter { game ->
             bag.hasEnoughColoredCubes(game)
         }.sumOf { game ->
@@ -35,6 +35,19 @@ class Day02 {
             gameSegments[0].replace("Game ", "").toInt(),
             cubeSets
         )
+    }
+
+    fun puzzle1SumAllPossibleGameIdsFromFile(fileName: String): Int {
+        return readInput(fileName)
+            .map { input ->
+                Day02(bag).loadGameFromInput(input)
+            }
+            .filter { game ->
+                bag.hasEnoughColoredCubes(game)
+            }
+            .sumOf { game ->
+                game.id
+            }
     }
 }
 
