@@ -1,10 +1,18 @@
 class Day02 {
-    fun puzzle1(game: Game, bag: Bag): Boolean {
+    fun puzzle1IsPossible(game: Game, bag: Bag): Boolean {
         return bag.hasEnoughColoredCubes(game)
+    }
+
+    fun puzzle1SumAllPossibleGameIds(games: List<Game>, bag: Bag): Int {
+        return games.filter { game ->
+            bag.hasEnoughColoredCubes(game)
+        }.sumOf { game ->
+            game.id
+        }
     }
 }
 
-class Game(private val id: Int, val cubeSets: List<CubeSet>) {
+class Game(val id: Int, val cubeSets: List<CubeSet>) {
     override fun toString() = "Game no.$id"
 }
 
