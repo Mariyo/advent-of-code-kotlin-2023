@@ -1,50 +1,95 @@
-fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
-    }
-
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
-}
-
 class Day01 {
-    fun part1SumCalibrationValuesFromInput(input: List<String>): Int {
+    fun sumCalibrationValuesFromInput(input: List<String>): Int {
         var result = 0
 
-        input.forEach { oneLine ->
-            var first: Char? = null
-            var last: Char? = null
-
-            oneLine.forEach { oneChar ->
-                if (oneChar.isDigit()) {
-                    if (first == null) first = oneChar else last = oneChar
-                }
-            }
-
-            if (first == null) {
-                throw RuntimeException("Invalid input line")
-            }
-
-            if (last == null) {
-                last = first
-            }
-
-            result += ("$first$last").toInt()
+        input.forEach {
+            result += it.calibrate()
         }
 
         return result
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun sumNormalizedValuesFromInput(input: List<String>): Int {
+        var result = 0
+
+        input.forEach {
+            val normalized = it.normalize().calibrate()
+
+            result += normalized
+        }
+
+        return result
     }
 }
+
+private fun String.normalize(): String {
+    var normalized = ""
+    var wordDigit = ""
+
+    run loop@{
+        this.lowercase().forEach { oneChar ->
+            if (oneChar.isDigit()) {
+                normalized += oneChar
+                return@loop
+            }
+
+            wordDigit += "$oneChar"
+
+            val wordDigitAsDigit = wordDigit
+                .replace("one", "1")
+                .replace("two", "2")
+                .replace("three", "3")
+                .replace("four", "4")
+                .replace("five", "5")
+                .replace("six", "6")
+                .replace("seven", "7")
+                .replace("eight", "8")
+                .replace("nine", "9")
+
+            if (wordDigitAsDigit != wordDigit) {
+                normalized += wordDigitAsDigit.replace(Regex("\\D+"), "")
+                return@loop
+            }
+        }
+    }
+
+    wordDigit = ""
+
+    run loop@{
+        this.lowercase().reversed().forEach { oneChar ->
+            if (oneChar.isDigit()) {
+                normalized += oneChar
+                return@loop
+            }
+
+            wordDigit = "$oneChar" + wordDigit
+
+            val wordDigitAsDigit = wordDigit
+                .replace("one", "1")
+                .replace("two", "2")
+                .replace("three", "3")
+                .replace("four", "4")
+                .replace("five", "5")
+                .replace("six", "6")
+                .replace("seven", "7")
+                .replace("eight", "8")
+                .replace("nine", "9")
+
+            if (wordDigitAsDigit != wordDigit) {
+                normalized += wordDigitAsDigit.replace(Regex("\\D+"), "")
+                return@loop
+            }
+        }
+    }
+
+    return normalized
+}
+
+private fun String.calibrate(): Int {
+    val calibrated = this.replace(Regex("\\D+"), "")
+    val first = calibrated.first()
+    val last = calibrated.last()
+    val result = "$first$last".toInt()
+    return result
+}
+
