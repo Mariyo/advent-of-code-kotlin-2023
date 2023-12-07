@@ -2,6 +2,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class Day02Test {
 
@@ -77,4 +78,17 @@ class Day02Test {
             )
         )
     }
+
+    @TestFactory
+    fun `it can load game from input string`() = listOf(
+        "Game 1: 3 blue, 4 red; 2 green, 6 blue, 1 red; 2 green" to game1,
+        "Game 5: 3 green, 1 blue, 6 red; 1 red, 2 green, 2 blue" to game5,
+    ).map { (input, expected) ->
+        DynamicTest.dynamicTest("Game from $input should be same as $expected") {
+            val resultGame = Day02().loadGameFromInput(input)
+            assertEquals(expected.id, resultGame.id)
+            assertEquals(expected.cubeSets, resultGame.cubeSets)
+        }
+    }
+
 }

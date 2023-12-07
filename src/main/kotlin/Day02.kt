@@ -10,15 +10,37 @@ class Day02 {
             game.id
         }
     }
+
+    fun loadGameFromInput(input: String): Game {
+        val gameSegments = input.split(":")
+
+        if (gameSegments.size != 2) throw RuntimeException("Invalid Game input")
+
+        val cubeSets = mutableListOf<CubeSet>()
+        val redRegex = Regex("(\\d+)\\s+red")
+        val greenRegex = Regex("(\\d+)\\s+green")
+        val blueRegex = Regex("(\\d+)\\s+blue")
+
+        gameSegments[1].split(";").forEach { cubeSegment ->
+            val redCount = redRegex.find(cubeSegment)?.groups?.get(1)?.value?.toInt() ?: 0
+            val greenCount = greenRegex.find(cubeSegment)?.groups?.get(1)?.value?.toInt() ?: 0
+            val blueCount = blueRegex.find(cubeSegment)?.groups?.get(1)?.value?.toInt() ?: 0
+
+            cubeSets.add(
+                CubeSet(redCount, greenCount, blueCount)
+            )
+        }
+
+        return Game(
+            gameSegments[0].replace("Game ", "").toInt(),
+            cubeSets
+        )
+    }
 }
 
-class Game(val id: Int, val cubeSets: List<CubeSet>) {
-    override fun toString() = "Game no.$id"
-}
+data class Game(val id: Int, val cubeSets: List<CubeSet>)
 
-class CubeSet(val redCount: Int, val greenCount: Int, val blueCount: Int) {
-
-}
+data class CubeSet(val redCount: Int, val greenCount: Int, val blueCount: Int)
 
 class Bag(private val redTotal: Int, private val greenTotal: Int, private val blueTotal: Int) {
     fun hasEnoughColoredCubes(game: Game): Boolean {
